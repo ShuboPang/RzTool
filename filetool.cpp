@@ -6,6 +6,28 @@ FileTool::FileTool()
 {
 
 }
+int FileTool::isNoneLine(QString data)
+{
+    while(data.indexOf('\r') != -1)
+    {
+        data.replace('\r',"");
+    }
+    while(data.indexOf('\n') != -1)
+    {
+        data.replace('\n',"");
+    }
+    while(data.indexOf('\t') != -1)
+    {
+        data.replace('\t',"");
+    }
+    while(data.indexOf(' ') != -1)
+    {
+        data.replace(' ',"");
+    }
+    return data.length();
+}
+
+
 /*
 输出文件
 
@@ -55,22 +77,31 @@ void  FileTool::outPutFile(QStringList paths,int config,QString path)
             {
                 if(lineData.length() == 0)
                 {
-
                     continue;
                 }
             }
             if(config & 0x02)       //去除行注释
             {
-                if(lineData.indexOf("//") != -1)
+                int pos = lineData.indexOf("//");
+                if( pos != -1)
                 {
-                    lineData = lineData.split("//")[0];
+                    lineData = lineData.remove(pos,lineData.length()-pos);
+
+                    if(lineData.indexOf('\t') != -1)
+                    {
+                        lineData.replace('\t',"");
+                    }
                     if(lineData.length() == 0)
                     {
                         continue;
                     }
                 }
             }
-            data += lineData+"\n";
+            if(isNoneLine(lineData))
+            {
+                data += lineData+"\n";
+            }
+
         }
 
         outputData += data;

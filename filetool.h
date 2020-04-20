@@ -9,6 +9,7 @@ class FileTool:public QObject
 public:
     FileTool();
     Q_INVOKABLE void outPutFile(QStringList paths,int config,QString path);
+    int isNoneLine(QString data);
 
 private:
     QString outPutPath;
