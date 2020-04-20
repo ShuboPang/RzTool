@@ -60,16 +60,16 @@ Window {
                     return;
                 }
                 var config = 0;
-                if(rmNoneLine.state){
+                if(rmNoneLine.checked){
                     config |= 1;
                 }
-                if(rmLine.state){
+                if(rmLine.checked){
                     config |= 1<<1;;
                 }
-                if(rmBlock.state){
+                if(rmBlock.checked){
                     config |= 1<<2;;
                 }
-                if(res3000Lines.state){
+                if(res3000Lines.checked){
                     config |= 1<<3;;
                 }
                 var paths = []
@@ -77,6 +77,7 @@ Window {
                 for(i =0;i<filePathModel.count;i++){
                     paths.push(filePathModel.get(i).path)
                 }
+                console.log("config",config)
                 fileTool.outPutFile(paths,config,outputPath.text)
             }
         }

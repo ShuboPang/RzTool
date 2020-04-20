@@ -26,22 +26,28 @@ void  FileTool::outPutFile(QStringList paths,int config,QString path)
 
         QStringList lines = data.split('\n');
         QString lineData;
+        data = "";
         int j = 0;
         for(j =0;j<lines.length();j++)
         {
             lineData = lines[j];
             if(config & 0x01)
             {
-                if(lineData.length() == 1 && lineData[0] == '\n')
+                if(lineData.length() == 0)
                 {
+
                     continue;
                 }
             }
             if(config & 0x02)
             {
-                if(lineData.indexOf("//"))
+                if(lineData.indexOf("//") != -1)
                 {
                     lineData = lineData.split("//")[0];
+                    if(lineData.length() == 0)
+                    {
+                        continue;
+                    }
                 }
             }
             data += lineData+"\n";
