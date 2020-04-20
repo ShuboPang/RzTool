@@ -31,15 +31,19 @@ Window {
             }
         }
         CheckBox{
+            id:rmNoneLine
             text:"去除空行"
         }
         CheckBox{
+            id:rmLine
             text:"去除行注释"
         }
         CheckBox{
+            id:rmBlock
             text:"去除块注释"
         }
         CheckBox{
+            id:res3000Lines
             text:"只保留3000行"
         }
         Button{
@@ -47,7 +51,33 @@ Window {
             width: 100
             height: 25
             onClicked:{
-
+                if(filePathModel.count == 0){
+                    console.log("没有输入文件")
+                    return;
+                }
+                if(setOutputPath.text.length == 0){
+                    console.log("没有输出路径")
+                    return;
+                }
+                var config = 0;
+                if(rmNoneLine.state){
+                    config |= 1;
+                }
+                if(rmLine.state){
+                    config |= 1<<1;;
+                }
+                if(rmBlock.state){
+                    config |= 1<<2;;
+                }
+                if(res3000Lines.state){
+                    config |= 1<<3;;
+                }
+                var paths = []
+                var i = 0;
+                for(i =0;i<filePathModel.count;i++){
+                    paths.push(filePathModel.get(i).path)
+                }
+                fileTool.outPutFile(paths,config,outputPath.text)
             }
         }
     }
@@ -63,7 +93,6 @@ Window {
                 filePath.path = String(fileUrls[i])
                 filePathModel.append(filePath)
             }
-
         }
     }
     FileDialog{
@@ -120,13 +149,13 @@ Window {
     }
     Text {
         id: outputPath
-        text: qsTr("请设置输出位置")
+        text: qsTr("请设置输出文件")
         anchors.top:displayRec.bottom
         anchors.topMargin: 10
     }
     Button {
         id: setOutputPath
-        text: qsTr("输出位置")
+        text: qsTr("输出路径")
         width: 100
         height: 25
         anchors.top:displayRec.bottom
