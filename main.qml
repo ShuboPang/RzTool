@@ -52,10 +52,12 @@ Window {
             height: 25
             onClicked:{
                 if(filePathModel.count == 0){
+                    tip.tipText = "没有输入文件"
                     console.log("没有输入文件")
                     return;
                 }
-                if(setOutputPath.text.length == 0){
+                if(outputPath.text == qsTr("请设置输出文件")){
+                    tip.tipText = "没有输出路径"
                     console.log("没有输出路径")
                     return;
                 }
@@ -78,7 +80,8 @@ Window {
                     paths.push(filePathModel.get(i).path)
                 }
                 console.log("config",config)
-                fileTool.outPutFile(paths,config,outputPath.text)
+                var lines = fileTool.outPutFile(paths,config,outputPath.text)
+                tip.tipText = "共完成"+lines+"行代码"
             }
         }
     }
@@ -165,6 +168,39 @@ Window {
         anchors.rightMargin: 10
         onClicked: {
             outputFileDialog.open()
+        }
+    }
+    Rectangle{
+        id: tip
+        width: 200
+        height: 100
+        visible: false
+        anchors.centerIn: parent
+        border.color: "black"
+        border.width: 1
+        color: "yellow"
+        property string tipText: ""
+
+        Text {
+            id:showText
+            y:20
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+        Button{
+            text:qsTr("确定")
+            anchors.top:showText.bottom
+            anchors.topMargin: 5
+            anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: {
+                tip.visible = false
+                tip.tipText = ""
+            }
+        }
+        onTipTextChanged: {
+            if(tip.tipText.length > 0){
+                tip.visible = true
+                showText.text = tip.tipText
+            }
         }
     }
 }

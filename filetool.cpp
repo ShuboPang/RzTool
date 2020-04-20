@@ -33,7 +33,7 @@ int FileTool::isNoneLine(QString data)
 
 */
 
-void  FileTool::outPutFile(QStringList paths,int config,QString path)
+int  FileTool::outPutFile(QStringList paths,int config,QString path)
 {
     int i = 0;
     QString outputData;
@@ -45,7 +45,7 @@ void  FileTool::outPutFile(QStringList paths,int config,QString path)
         QFile file(path);
         if(!file.open(QFile::ReadOnly))
         {
-           return;
+           return 0;
         }
 
         QString data = file.readAll();
@@ -100,12 +100,10 @@ void  FileTool::outPutFile(QStringList paths,int config,QString path)
             if(isNoneLine(lineData))
             {
                 data += lineData+"\n";
+                count++;
             }
-
         }
-
         outputData += data;
-        count++;
         if(config & 0x08)       //只保留3000行代码
         {
             if(count == 3000)
@@ -117,8 +115,9 @@ void  FileTool::outPutFile(QStringList paths,int config,QString path)
     QFile outputFile(path.mid(7));
     if(!outputFile.open(QFile::ReadWrite))
     {
-       return;
+       return 0;
     }
     outputFile.write(outputData.toUtf8());
     outputFile.close();
+    return count;
 }

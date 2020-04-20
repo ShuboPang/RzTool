@@ -8,7 +8,7 @@ class FileTool:public QObject
     Q_OBJECT
 public:
     FileTool();
-    Q_INVOKABLE void outPutFile(QStringList paths,int config,QString path);
+    Q_INVOKABLE int outPutFile(QStringList paths,int config,QString path);
     int isNoneLine(QString data);
 
 private:
