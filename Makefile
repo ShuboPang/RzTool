@@ -50,9 +50,13 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp qrc_qml.cpp
+SOURCES       = main.cpp \
+		filetool.cpp qrc_qml.cpp \
+		moc_filetool.cpp
 OBJECTS       = main.o \
-		qrc_qml.o
+		filetool.o \
+		qrc_qml.o \
+		moc_filetool.o
 DIST          = ../../Qt5.10.0/5.10.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.10.0/5.10.0/gcc_64/mkspecs/common/unix.conf \
 		../../Qt5.10.0/5.10.0/gcc_64/mkspecs/common/linux.conf \
@@ -235,7 +239,8 @@ DIST          = ../../Qt5.10.0/5.10.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.10.0/5.10.0/gcc_64/mkspecs/features/exceptions.prf \
 		../../Qt5.10.0/5.10.0/gcc_64/mkspecs/features/yacc.prf \
 		../../Qt5.10.0/5.10.0/gcc_64/mkspecs/features/lex.prf \
-		RzTool.pro  main.cpp
+		RzTool.pro filetool.h main.cpp \
+		filetool.cpp
 QMAKE_TARGET  = RzTool
 DESTDIR       = 
 TARGET        = RzTool
@@ -642,7 +647,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt5.10.0/5.10.0/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents filetool.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp filetool.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -680,8 +686,65 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../Qt5.10.0/5.10.0/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h ../../Qt5.10.0/5.10.0/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_filetool.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_filetool.cpp
+moc_filetool.cpp: ../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/QString \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstring.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qchar.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qglobal.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qconfig.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qlogging.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qflags.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qatomic.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qmutex.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringview.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/QObject \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qobject.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qlist.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qiterator.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qpair.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qbytearraylist.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringlist.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qregexp.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringmatcher.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qcoreevent.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qscopedpointer.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qobject_impl.h \
+		filetool.h \
+		moc_predefs.h \
+		../../Qt5.10.0/5.10.0/gcc_64/bin/moc
+	/home/ubuntu/Qt5.10.0/5.10.0/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/ubuntu/Qt5.10.0/5.10.0/gcc_64/mkspecs/linux-g++ -I/home/ubuntu/RzTool/RzTool -I/home/ubuntu/Qt5.10.0/5.10.0/gcc_64/include -I/home/ubuntu/Qt5.10.0/5.10.0/gcc_64/include/QtQuick -I/home/ubuntu/Qt5.10.0/5.10.0/gcc_64/include/QtGui -I/home/ubuntu/Qt5.10.0/5.10.0/gcc_64/include/QtQml -I/home/ubuntu/Qt5.10.0/5.10.0/gcc_64/include/QtNetwork -I/home/ubuntu/Qt5.10.0/5.10.0/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include filetool.h -o moc_filetool.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -692,7 +755,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
@@ -787,11 +850,91 @@ main.o: main.cpp ../../Qt5.10.0/5.10.0/gcc_64/include/QtGui/QGuiApplication \
 		../../Qt5.10.0/5.10.0/gcc_64/include/QtQml/qqmllist.h \
 		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qmetaobject.h \
 		../../Qt5.10.0/5.10.0/gcc_64/include/QtQml/qqmlerror.h \
-		../../Qt5.10.0/5.10.0/gcc_64/include/QtQml/qqmldebug.h
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtQml/qqmldebug.h \
+		filetool.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/QString \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/QObject \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtQml/QQmlContext \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtQml/qqmlcontext.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+filetool.o: filetool.cpp filetool.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/QString \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstring.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qchar.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qglobal.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qconfig.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qtcore-config.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qsystemdetection.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qprocessordetection.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qtypeinfo.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qsysinfo.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qlogging.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qflags.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qatomic.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qbasicatomic.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qgenericatomic.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qmutex.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qversiontagging.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qbytearray.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qnamespace.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringliteral.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringview.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringbuilder.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/QObject \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qobject.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qlist.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qalgorithms.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qiterator.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qhashfunctions.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qpair.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qbytearraylist.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringlist.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qregexp.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qstringmatcher.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qcoreevent.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qscopedpointer.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qmetatype.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qobject_impl.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/QDebug \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qdebug.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qhash.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qmap.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qtextstream.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qiodevice.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qlocale.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qvariant.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qshareddata.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qvector.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qpoint.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qset.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qsharedpointer.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/QFile \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qfile.h \
+		../../Qt5.10.0/5.10.0/gcc_64/include/QtCore/qfiledevice.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filetool.o filetool.cpp
 
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp
+
+moc_filetool.o: moc_filetool.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_filetool.o moc_filetool.cpp
 
 ####### Install
 
