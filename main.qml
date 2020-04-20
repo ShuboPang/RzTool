@@ -7,7 +7,7 @@ import QtQuick.Controls 1.2
 Window {
     visible: true
     width: 800
-    height: displayRec.height+headLine.height+70
+    height: 600
     title: qsTr("软著源码整理工具")
     Row{
         id:headLine
@@ -56,7 +56,7 @@ Window {
                     console.log("没有输入文件")
                     return;
                 }
-                if(outputPath.text == qsTr("请设置输出文件")){
+                if(outputPath.text.length == 0){
                     tip.tipText = "没有输出路径"
                     console.log("没有输出路径")
                     return;
@@ -115,7 +115,7 @@ Window {
         id:displayRec
         width: parent.width-10
         x:5
-        height: 510
+        height: parent.height - headLine.height -10 -outputName.height-30
         anchors.top:headLine.bottom
         anchors.topMargin: 10
         border.color: "black"
@@ -152,14 +152,32 @@ Window {
         }
     }
     Text {
-        id: outputPath
-        text: qsTr("请设置输出文件")
+        id:outputName
+        x:10
         anchors.top:displayRec.bottom
         anchors.topMargin: 10
+        text: qsTr("输出文件位置:")
+    }
+    Rectangle{
+        anchors.top:displayRec.bottom
+        anchors.topMargin: 10
+        anchors.left: outputName.right
+        anchors.leftMargin: 10
+        border.color: "black"
+        border.width: 1
+        height: outputPath.height+5
+        width: parent.width-120 - outputName.width-20
+        TextInput{
+             id: outputPath
+             y:4
+             x:10
+             width: parent.width-20
+             text: ""
+         }
     }
     Button {
         id: setOutputPath
-        text: qsTr("输出路径")
+        text: qsTr("浏览")
         width: 100
         height: 25
         anchors.top:displayRec.bottom
