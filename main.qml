@@ -79,9 +79,16 @@ Window {
                 for(i =0;i<filePathModel.count;i++){
                     paths.push(filePathModel.get(i).path)
                 }
-                console.log("config",config)
                 var lines = fileTool.outPutFile(paths,config,outputPath.text)
-                tip.tipText = "共完成"+lines+"行代码"
+                if(lines >= 0){
+                    tip.tipText = "共完成"+lines+"行代码"
+                }
+                else if(lines == -1){
+                    tip.tipText = "输出文件"+outputPath.text+"打开失败"
+                }
+                else {
+                    tip.tipText = "输入文件"+filePathModel.get(lines*-1-2).path+"打开失败"
+                }
             }
         }
     }

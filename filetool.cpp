@@ -45,7 +45,7 @@ int  FileTool::outPutFile(QStringList paths,int config,QString path)
         QFile file(path);
         if(!file.open(QFile::ReadOnly))
         {
-           return 0;
+           return -2+i;
         }
 
         QString data = file.readAll();
@@ -102,20 +102,20 @@ int  FileTool::outPutFile(QStringList paths,int config,QString path)
                 data += lineData+"\n";
                 count++;
             }
-        }
-        outputData += data;
-        if(config & 0x08)       //只保留3000行代码
-        {
-            if(count == 3000)
+            if(config & 0x08)       //只保留3000行代码
             {
-                break;
+                if(count == 3000)
+                {
+                    break;
+                }
             }
         }
+        outputData += data;
     }
     QFile outputFile(path.mid(7));
     if(!outputFile.open(QFile::ReadWrite))
     {
-       return 0;
+       return -1;
     }
     outputFile.write(outputData.toUtf8());
     outputFile.close();
