@@ -6,8 +6,8 @@ import QtQuick.Controls 1.2
 
 Window {
     visible: true
-    width: 800
-    height: 600
+    minimumWidth: 800
+    minimumHeight: 600
     title: qsTr("软著源码整理工具")
     Row{
         id:headLine
@@ -102,7 +102,20 @@ Window {
             for(i =0;i<fileUrls.length;i++){
                 var filePath={}
                 filePath.path = String(fileUrls[i])
-                filePathModel.append(filePath)
+                for(var j=0;j<filePathModel.count;j++){
+                    if(filePath.path == filePathModel.get(j).path){
+                        //有重复路径
+                        break;
+                    }
+                }
+                if(j != filePathModel.count){
+                    //有重复路径
+                    tip.tipText = "已去除重复文件"
+                    continue
+                }
+                else{
+                    filePathModel.append(filePath)
+                }
             }
         }
     }
@@ -137,9 +150,12 @@ Window {
             delegate:Rectangle{
                 width: parent.width-10
                 height: 30
+                color: filePathListView.currentIndex == index ?"#ADD8E6":"transparent"
                 Text {
                     id: name
                     text: path
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: parent.width-10-100-10
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
@@ -151,6 +167,10 @@ Window {
                     text: "删除"
                     anchors.right: parent.right
                     anchors.rightMargin: 10
+                    visible: filePathListView.currentIndex == index
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 25
+                    width: 100
                     onClicked: {
                         filePathModel.remove(index)
                     }
@@ -203,7 +223,7 @@ Window {
         anchors.centerIn: parent
         border.color: "black"
         border.width: 1
-        color: "yellow"
+        color: "#ADD8E6"
         property string tipText: ""
 
         Text {

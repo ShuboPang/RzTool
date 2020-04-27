@@ -110,6 +110,10 @@ int  FileTool::outPutFile(QStringList paths,int config,QString path)
                 }
             }
         }
+        if(count == 3000)
+        {
+            break;
+        }
         outputData += data;
     }
     QFile outputFile(path.mid(7));
