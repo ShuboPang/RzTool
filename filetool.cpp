@@ -41,7 +41,11 @@ int  FileTool::outPutFile(QStringList paths,int config,QString path)
     for(i = 0;i<paths.length();i++)
     {
         QString path = paths[i];
-        path = path.mid(7);
+#ifdef Q_OS_WINDOWS
+        path =path.mid(8);
+#elif Q_OS_LINUX
+        path =path.mid(7);
+#endif
         QFile file(path);
         if(!file.open(QFile::ReadOnly))
         {
@@ -112,7 +116,11 @@ int  FileTool::outPutFile(QStringList paths,int config,QString path)
         }
         outputData += data;
     }
+#ifdef Q_OS_WINDOWS
+    QFile outputFile(path.mid(8));
+#elif Q_OS_LINUX
     QFile outputFile(path.mid(7));
+#endif
     if(!outputFile.open(QFile::ReadWrite))
     {
        return -1;
