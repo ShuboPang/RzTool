@@ -82,6 +82,7 @@ Window {
                 var lines = fileTool.outPutFile(paths,config,outputPath.text)
                 if(lines >= 0){
                     tip.tipText = "共完成"+lines+"行代码"
+                    openFolder.visible = true
                 }
                 else if(lines == -1){
                     tip.tipText = "输出文件"+outputPath.text+"打开失败"
@@ -247,16 +248,32 @@ Window {
             y:20
             anchors.horizontalCenter: parent.horizontalCenter
         }
-        Button{
-            text:qsTr("确定")
+        Row{
             anchors.top:showText.bottom
             anchors.topMargin: 5
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: {
-                tip.visible = false
-                tip.tipText = ""
+            spacing: 20
+            Button{
+                text:qsTr("确定")
+                onClicked: {
+                    tip.visible = false
+                    tip.tipText = ""
+                    openFolder.visible = false
+                }
+            }
+            Button{
+                id:openFolder
+                text:qsTr("打开生成文件")
+                visible: false
+                onClicked: {
+                    fileTool.openFolder(outputPath.text)
+                    visible = false
+                    tip.visible = false
+                    tip.tipText = ""
+                }
             }
         }
+
         onTipTextChanged: {
             if(tip.tipText.length > 0){
                 tip.visible = true
