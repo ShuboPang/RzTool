@@ -108,7 +108,6 @@ Window {
 
             for(i =0;i<fileUrls.length;i++){
                 var filePath={}
-<<<<<<< HEAD
                 if(fileTool.isWindowSystem())
                     filePath.path = String(fileUrls[i]).substring(8)
                 else{
@@ -117,23 +116,6 @@ Window {
 
                 if(arr.indexOf(filePath.path) == -1)
                     filePathModel.append(filePath)
-=======
-                filePath.path = String(fileUrls[i])
-                for(var j=0;j<filePathModel.count;j++){
-                    if(filePath.path == filePathModel.get(j).path){
-                        //有重复路径
-                        break;
-                    }
-                }
-                if(j != filePathModel.count){
-                    //有重复路径
-                    tip.tipText = "已去除重复文件"
-                    continue
-                }
-                else{
-                    filePathModel.append(filePath)
-                }
->>>>>>> 025ccc9638cc3ffcd36335193519b5fded1d3b7e
             }
         }
     }
