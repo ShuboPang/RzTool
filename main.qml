@@ -25,7 +25,7 @@ Window {
         Button{
             width: 100
             height: 25
-            text:qsTr("清空所有")
+            text:qsTr("清空所有")+"("+filePathModel.count+")"
             onClicked:{
                 filePathModel.clear()
             }
@@ -99,10 +99,23 @@ Window {
         selectMultiple: true
         onAccepted: {
             var i = 0;
+            var arr = [];
+            for(i = 0;i<filePathModel.count;i++){
+                arr.push(filePathModel.get(i).path)
+            }
+            console.log(arr)
+
+
             for(i =0;i<fileUrls.length;i++){
                 var filePath={}
-                filePath.path = String(fileUrls[i])
-                filePathModel.append(filePath)
+                if(fileTool.isWindowSystem())
+                    filePath.path = String(fileUrls[i]).substring(8)
+                else{
+                    filePath.path = String(fileUrls[i]).substring(7)
+                }
+
+                if(arr.indexOf(filePath.path) == -1)
+                    filePathModel.append(filePath)
             }
         }
     }
@@ -112,8 +125,18 @@ Window {
         nameFilters: [ "All files (*)" ]
         selectMultiple: false
         onAccepted: {
-            outputPath.text = String(fileUrl)
+            if(fileTool.isWindowSystem())
+                outputPath.text = String(fileUrl).substring(8)
+            else{
+                outputPath.text = String(fileUrl).substring(7)
+            }
         }
+        Component.onCompleted: {
+            outputPath.text = fileTool.currentPath()
+            outputPath.text += "/default.rzt"
+
+        }
+
     }
     ListModel{
         id:filePathModel
@@ -180,6 +203,12 @@ Window {
              x:10
              width: parent.width-20
              text: ""
+             MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    fileTool.openFolder(outputPath.text)
+                }
+             }
          }
     }
     Button {

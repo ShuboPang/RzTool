@@ -1,6 +1,7 @@
 #include "filetool.h"
 #include <QDebug>
 #include<QFile>
+#include <QCoreApplication>
 
 FileTool::FileTool()
 {
@@ -27,6 +28,38 @@ int FileTool::isNoneLine(QString data)
     return data.length();
 }
 
+int  FileTool::isWindowSystem()
+{
+#ifdef Q_OS_WINDOWS
+    return 1;
+#else
+    return 0;
+#endif
+}
+
+//打开文件夹
+int FileTool::openFolder(QString path)
+{
+    if(path == NULL)
+    {
+        return -1;
+    }
+#ifdef Q_OS_LINUX
+    QString cmd = "nautilus "+path;
+#else
+    QString cmd = "start \"\" " +path;
+#endif
+    system(cmd.toLocal8Bit());
+    return 0;
+}
+
+QString FileTool::currentPath()
+{
+    QString fileName = QCoreApplication::applicationDirPath();
+    return fileName;
+}
+
+
 
 /*
 输出文件
@@ -41,11 +74,11 @@ int  FileTool::outPutFile(QStringList paths,int config,QString path)
     for(i = 0;i<paths.length();i++)
     {
         QString path = paths[i];
-#ifdef Q_OS_WINDOWS
-        path =path.mid(8);
-#elif Q_OS_LINUX
-        path =path.mid(7);
-#endif
+//#ifdef Q_OS_WINDOWS
+//        path =path.mid(8);
+//#elif Q_OS_LINUX
+//        path =path.mid(7);
+//#endif
         QFile file(path);
         if(!file.open(QFile::ReadOnly))
         {
@@ -116,11 +149,12 @@ int  FileTool::outPutFile(QStringList paths,int config,QString path)
         }
         outputData += data;
     }
-#ifdef Q_OS_WINDOWS
-    QFile outputFile(path.mid(8));
-#elif Q_OS_LINUX
-    QFile outputFile(path.mid(7));
-#endif
+//#ifdef Q_OS_WINDOWS
+//    QFile outputFile(path.mid(8));
+//#elif Q_OS_LINUX
+//    QFile outputFile(path.mid(7));
+//#endif
+    QFile outputFile(path);
     if(!outputFile.open(QFile::ReadWrite))
     {
        return -1;

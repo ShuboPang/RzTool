@@ -10,7 +10,9 @@ public:
     FileTool();
     Q_INVOKABLE int outPutFile(QStringList paths,int config,QString path);
     int isNoneLine(QString data);
-
+    Q_INVOKABLE int isWindowSystem();
+    Q_INVOKABLE int openFolder(QString path);
+    Q_INVOKABLE QString currentPath();
 private:
     QString outPutPath;
     QStringList inputPath;
