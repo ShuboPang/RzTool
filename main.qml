@@ -104,9 +104,6 @@ Window {
             for(i = 0;i<filePathModel.count;i++){
                 arr.push(filePathModel.get(i).path)
             }
-            console.log(arr)
-
-
             for(i =0;i<fileUrls.length;i++){
                 var filePath={}
                 if(fileTool.isWindowSystem())
@@ -186,6 +183,29 @@ Window {
                         filePathModel.remove(index)
                     }
                 }
+            }
+        }
+        DropArea{
+            anchors.fill: parent
+            onDropped: {
+                if(drop.hasUrls){
+                    var i = 0;
+                    var arr = [];
+                    for(i = 0;i<filePathModel.count;i++){
+                        arr.push(filePathModel.get(i).path)
+                    }
+                    for(i = 0; i < drop.urls.length; i++){
+                       var filePath={}
+                       if(fileTool.isWindowSystem())
+                           filePath.path = String(drop.urls[i]).substring(8)
+                       else{
+                           filePath.path = String(drop.urls[i]).substring(7)
+                       }
+
+                       if(arr.indexOf(filePath.path) == -1)
+                           filePathModel.append(filePath)
+                   }
+               }
             }
         }
     }
