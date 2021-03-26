@@ -8,7 +8,7 @@ Window {
     visible: true
     minimumWidth: 800
     minimumHeight: 600
-    title: qsTr("软著源码整理工具")
+    title: qsTr("软著源码整理工具")+"v202103261125"
     Row{
         id:headLine
         spacing: 10
