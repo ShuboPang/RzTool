@@ -163,6 +163,7 @@ int  FileTool::outPutFile(QStringList paths,int config,QString path)
     {
        return -1;
     }
+    outputFile.resize(0);
     outputFile.write(outputData.toUtf8());
     outputFile.close();
     return count;
