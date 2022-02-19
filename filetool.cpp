@@ -1,12 +1,18 @@
 #include "filetool.h"
 #include <QDebug>
-#include<QFile>
+#include <QFile>
 #include <QCoreApplication>
+#include <QDir>
+#include <QFile>
+#include "data/settingdata.h"
+#include "wordcontrol/wordcontrol.h"
 
 FileTool::FileTool()
 {
-
+    SettingData::Instance()->Init();
 }
+
+
 int FileTool::isNoneLine(QString data)
 {
     while(data.indexOf('\r') != -1)
@@ -59,6 +65,24 @@ QString FileTool::currentPath()
     return fileName;
 }
 
+int FileTool::getConfig(){
+    QString ret = SettingData::Instance()->GetUserValue("config","0");
+    return ret.toInt();
+}
+
+
+void FileTool::setConfig(int value){
+    SettingData::Instance()->SetUserValue("config",QString::number(value));
+}
+
+
+void FileTool::setCustomSetting(const QString& key,const QString& value){
+    SettingData::Instance()->SetUserValue(key,value);
+}
+
+QString FileTool::getCustomSetting(const QString& key,const QString& value){
+    return SettingData::Instance()->GetUserValue(key,value);
+}
 
 
 /*
@@ -158,13 +182,24 @@ int  FileTool::outPutFile(QStringList paths,int config,QString path)
 //#elif Q_OS_LINUX
 //    QFile outputFile(path.mid(7));
 //#endif
-    QFile outputFile(path);
-    if(!outputFile.open(QFile::ReadWrite))
-    {
-       return -1;
+//    QFile outputFile(path);
+//    if(!outputFile.open(QFile::ReadWrite))
+//    {
+//       return -1;
+//    }
+//    outputFile.resize(0);
+//    outputFile.write(outputData.toUtf8());
+//    outputFile.close();
+
+    WordControl word;
+    QDir dir;
+    QFileInfo file_i(QString::fromLocal8Bit("./resource/doc/template.dot"));
+    if(!file_i.exists()){
+        qDebug()<<"file_p not exists"<<file_i.absoluteFilePath();
+        return -1;
     }
-    outputFile.resize(0);
-    outputFile.write(outputData.toUtf8());
-    outputFile.close();
+    word.createWordDocument(file_i.absoluteFilePath());
+    word.insertText("text",outputData.toUtf8());
+    word.saveAndQuit(path);
     return count;
 }

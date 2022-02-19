@@ -3,12 +3,13 @@ import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.3
 import QtQuick 2.0
 import QtQuick.Controls 1.2
+import QtQml 2.12
 
 Window {
     visible: true
     minimumWidth: 800
     minimumHeight: 600
-    title: qsTr("软著源码整理工具")+"v202103261125"
+    title: qsTr("软著源码整理工具")+"v202202182346"
     Row{
         id:headLine
         spacing: 10
@@ -30,21 +31,50 @@ Window {
                 filePathModel.clear()
             }
         }
+
+        function sync_config(){
+            var config = 0;
+            if(rmNoneLine.checked){
+                config |= 1;
+            }
+            if(rmLine.checked){
+                config |= 1<<1;;
+            }
+            if(rmBlock.checked){
+                config |= 1<<2;;
+            }
+            if(res3000Lines.checked){
+                config |= 1<<3;;
+            }
+            return config;
+        }
         CheckBox{
             id:rmNoneLine
             text:"去除空行"
+            onClicked: {
+                fileTool.setConfig(headLine.sync_config())
+            }
         }
         CheckBox{
             id:rmLine
             text:"去除行注释"
+            onClicked: {
+                fileTool.setConfig(headLine.sync_config())
+            }
         }
         CheckBox{
             id:rmBlock
             text:"去除块注释"
+            onClicked: {
+                fileTool.setConfig(headLine.sync_config())
+            }
         }
         CheckBox{
             id:res3000Lines
             text:"只保留3000行"
+            onClicked: {
+                fileTool.setConfig(headLine.sync_config())
+            }
         }
         Button{
             text:"开始生成"
@@ -61,19 +91,7 @@ Window {
                     console.log("没有输出路径")
                     return;
                 }
-                var config = 0;
-                if(rmNoneLine.checked){
-                    config |= 1;
-                }
-                if(rmLine.checked){
-                    config |= 1<<1;;
-                }
-                if(rmBlock.checked){
-                    config |= 1<<2;;
-                }
-                if(res3000Lines.checked){
-                    config |= 1<<3;;
-                }
+                var config = headLine.sync_config();
                 var paths = []
                 var i = 0;
                 for(i =0;i<filePathModel.count;i++){
@@ -128,10 +146,10 @@ Window {
             else{
                 outputPath.text = String(fileUrl).substring(7)
             }
+            fileTool.setCustomSetting("output_path",outputPath.text)
         }
         Component.onCompleted: {
-            outputPath.text = fileTool.currentPath()
-            outputPath.text += "/default.rzt"
+
 
         }
 
@@ -301,4 +319,24 @@ Window {
             }
         }
     }
+    Component.onCompleted: {
+        var config = fileTool.getConfig()
+        if(config & 0x01){
+            rmNoneLine.checked = true;
+        }
+        if(config & 0x02){
+            rmLine.checked = true;
+        }
+        if(config & 0x04){
+            rmBlock.checked = true;
+        }
+        if(config & 0x08){
+            res3000Lines.checked = true;
+        }
+        outputPath.text = fileTool.currentPath()
+        outputPath.text += "/default.doc"
+        var output_path = fileTool.getCustomSetting("output_path",outputPath.text)
+        outputPath.text = output_path;
+    }
+
 }
