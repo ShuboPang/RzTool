@@ -10,9 +10,15 @@ WordControl::WordControl(QObject *parent) : QObject(parent)
     m_pDocument= NULL;
 }
 
-void WordControl::createWordDocument(const QString& path)
+void WordControl::createWordDocument(const QString& path, bool wps)
 {
-    m_pWord= new QAxWidget("KWPS.Application");//新建一个word应用程序
+    if(wps){
+        m_pWord= new QAxWidget("KWPS.Application");//新建一个word应用程序
+    }
+    else{
+        m_pWord= new QAxWidget("Word.Application");//新建一个word应用程序
+    }
+
     m_pWord->setProperty("Visible", false);//不显示窗体
 
     QAxObject *pDocuments= m_pWord->querySubObject("Documents");

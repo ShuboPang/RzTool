@@ -19,7 +19,7 @@ private:
     QAxObject *m_pDocument;//
 
 public:
-    void createWordDocument(const QString &path);//创建word文档
+    void createWordDocument(const QString &path,bool wps = false);//创建word文档
     bool insertText(QString Tag, QString text);//往标签处插入文字
     void saveAndQuit(const QString &text);//保存文档并退出
 
